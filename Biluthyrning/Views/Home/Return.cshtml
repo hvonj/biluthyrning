@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Biluthyrning.Models.Booking>
+@*@{
+    string message = ViewData["message"].ToString();
+
+}*@
+
+
+<h1>Return a car</h1>
+<br />
+
+<div class="col-lg-10">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Delete</th>
+                <th scope="col">Return</th>
+                <th scope="col"></th>
+
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+            <tr>
+                <th scope="row">@item.Id</th>
+                <td>@item.CustomerBirthday.ToString("yyyy-MM-dd")</td>
+                <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.EndDate.ToString("yyyy-MM-dd")</td>
+
+                <td><a asp-action="Delete" asp-route-id="@item.Id">Delete booking</a></td>
+                <td><a asp-action="ReturnBooking" asp-route-id="@item.Id">Return car</a></td>
+
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div style="clear: both;"></div>

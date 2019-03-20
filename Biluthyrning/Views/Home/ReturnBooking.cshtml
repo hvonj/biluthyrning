@@ -1,0 +1,74 @@
+﻿@model Biluthyrning.Models.Booking
+
+@{
+    string message = ViewData["message"].ToString();
+
+    int kmDroven = Model.Car.Km;
+
+    string stringKm = ViewData["stringKm"].ToString();
+
+    if (stringKm == "")
+    {
+
+    }
+    else
+    {
+        kmDroven = int.Parse(stringKm);
+    }
+
+}
+
+<style>
+    input[type=text], select {
+        width: 100%;
+        padding: 14px 30px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type=submit] {
+        width: 100%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        width: 150px;
+        margin: 5px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+</style>
+
+<br />
+<h3>KM at time of return.</h3>
+<h4>(@Model.Car.Km km at start date)</h4>
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ReturnCarAfterKM">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="form-group">
+                <input type="text" name="kmdroven" style="width: 250px">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Calculate price" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<h4>@message</h4>
+<br /><br />
+<h3>Return car?</h3> 
+<h4>Update changes and remove booking.</h4>
+<form asp-action="UpdateAndRemove">
+    <input type="hidden" name="carId" value="@Model.CarId" />
+    <input type="hidden" name="kmNow" value="@kmDroven" />
+    <input type="hidden" name="bookId" value="@Model.Id" />
+    <div class="form-group">
+        <input type="submit" value="Update & Remove" class="btn btn-default" />
+    </div>
+</form>
