@@ -36,9 +36,11 @@ namespace Biluthyrning.Controllers
 
         public IActionResult Rent()
         {
-            var viewmodel = new CarBookingVM();
-            viewmodel.AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() });
-            viewmodel.AllCustomers = _context.Customers.Select(Customer => new SelectListItem() { Text = Customer.FirstName + " " + Customer.LastName, Value = Customer.Id.ToString() });
+            var viewmodel = new CarBookingVM
+            {
+                AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() }),
+                AllCustomers = _context.Customers.Select(Customer => new SelectListItem() { Text = Customer.FirstName + " " + Customer.LastName, Value = Customer.Id.ToString() })
+            };
             ViewData["Message"] = "";
             return View(viewmodel);
         }
@@ -51,15 +53,19 @@ namespace Biluthyrning.Controllers
             {
                 _context.Add(booking);
                 _context.SaveChanges();
-                var viewmodel = new CarBookingVM();
-                viewmodel.AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() });
+                var viewmodel = new CarBookingVM
+                {
+                    AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() })
+                };
                 ViewData["message"] = "Booking accepted!";
                 return View("Rent", viewmodel);
             }
             else
             {
-                var viewmodel = new CarBookingVM();
-                viewmodel.AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() });
+                var viewmodel = new CarBookingVM
+                {
+                    AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() })
+                };
                 ViewData["message"] = "Error, please try again!";
                 return View("Rent", viewmodel);
             }
@@ -258,7 +264,7 @@ namespace Biluthyrning.Controllers
 
             List<Booking> list = new List<Booking>();
 
-            list = _context.Bookings.Where(x => x.CustomerBirthday == customerbirthday).ToList();
+            list = _context.Bookings.Where(x => x.CustomerBirthday == customerbirthday).Include(x => x.Car).Include(x => x.Customer).ToList();
             return View(list);
 
         }

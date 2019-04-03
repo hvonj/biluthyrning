@@ -20,8 +20,9 @@
 
         @foreach (var item in Model)
         {
+
             <tr>
-                <th scope="row"><a asp-action="AvailableCustCar" asp-route-id="@item.CustomerBirthday">@item.CustomerBirthday</a></th>
+                <th scope="row"><a asp-action="AvailableCustCar" asp-route-id="@item.Customer.FirstName">@item.Customer.FirstName</a></th>
                 <td>@item.Car.RegNumber</td>
                 <td>@item.Car.Km</td>
                 <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
