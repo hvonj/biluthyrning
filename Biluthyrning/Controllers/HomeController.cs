@@ -38,12 +38,13 @@ namespace Biluthyrning.Controllers
         {
             var viewmodel = new CarBookingVM();
             viewmodel.AllCars = _context.Cars.Select(RegNumber => new SelectListItem() { Text = RegNumber.RegNumber, Value = RegNumber.Id.ToString() });
+            viewmodel.AllCustomers = _context.Customers.Select(Customer => new SelectListItem() { Text = Customer.FirstName + " " + Customer.LastName, Value = Customer.Id.ToString() });
             ViewData["Message"] = "";
             return View(viewmodel);
         }
 
         [HttpPost]
-        public IActionResult SaveBooking([Bind("CustomerBirthday, CarId, StartDate, EndDate")] Booking booking)
+        public IActionResult SaveBooking([Bind("CustomerBirthday, CarId, StartDate, EndDate, CustomerId")] Booking booking)
         {
 
             if (ModelState.IsValid)
@@ -268,15 +269,15 @@ namespace Biluthyrning.Controllers
 
         }
 
-        public IActionResult CreateCustomer([Bind("Name,Lastname,Birthday")] Customer customer)
+        public async Task<IActionResult> CreateCustomer([Bind("Birthday,FirstName,LastName")] Customer customer)
         {
 
             if (ModelState.IsValid)
             {
 
-                _context.Add(customer);
-
-                return RedirectToAction(nameof(GetCustomers));
+               _context.Add(customer);
+               await _context.SaveChangesAsync();
+               return RedirectToAction(nameof(GetCustomers));
             }
 
             return RedirectToAction(nameof(CreateNewCustomer));

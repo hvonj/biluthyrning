@@ -36,8 +36,8 @@
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Booking.CustomerBirthday" class="control-label">Birthday:</label>
-                <select class="form-control" asp-for="Booking.CustomerBirthday" asp-items="@Model.AllCustomers">
+                <label asp-for="Booking.Customer.Birthday" class="control-label">Customer:</label>
+                <select class="form-control" asp-for="Booking.Customer.Id" asp-items="@Model.AllCustomers">
                     <option>Choose customer</option>
                 </select>
             </div>
