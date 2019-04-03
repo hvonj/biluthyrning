@@ -61,6 +61,21 @@ namespace Biluthyrning.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    FirstName = table.Column<string>(nullable: true),
+                    LastName = table.Column<string>(nullable: true),
+                    Birthday = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -174,7 +189,8 @@ namespace Biluthyrning.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     RegNumber = table.Column<string>(nullable: true),
                     Km = table.Column<int>(nullable: false),
-                    CarTypeId = table.Column<int>(nullable: true)
+                    CarTypeId = table.Column<int>(nullable: true),
+                    FreeOrNot = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -194,6 +210,7 @@ namespace Biluthyrning.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     CustomerBirthday = table.Column<DateTime>(nullable: false),
+                    CustomerId = table.Column<int>(nullable: true),
                     CarId = table.Column<int>(nullable: false),
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false)
@@ -207,6 +224,12 @@ namespace Biluthyrning.Migrations
                         principalTable: "Cars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Bookings_Customers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -254,6 +277,11 @@ namespace Biluthyrning.Migrations
                 column: "CarId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bookings_CustomerId",
+                table: "Bookings",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Cars_CarTypeId",
                 table: "Cars",
                 column: "CarTypeId");
@@ -287,6 +315,9 @@ namespace Biluthyrning.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cars");
+
+            migrationBuilder.DropTable(
+                name: "Customers");
 
             migrationBuilder.DropTable(
                 name: "Cartypes");

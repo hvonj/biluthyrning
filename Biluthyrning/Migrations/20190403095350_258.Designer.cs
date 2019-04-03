@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Biluthyrning.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20190313120900_001")]
-    partial class _001
+    [Migration("20190403095350_258")]
+    partial class _258
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,6 +31,8 @@ namespace Biluthyrning.Migrations
 
                     b.Property<DateTime>("CustomerBirthday");
 
+                    b.Property<int?>("CustomerId");
+
                     b.Property<DateTime>("EndDate");
 
                     b.Property<DateTime>("StartDate");
@@ -38,6 +40,8 @@ namespace Biluthyrning.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Bookings");
                 });
@@ -49,6 +53,8 @@ namespace Biluthyrning.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CarTypeId");
+
+                    b.Property<bool>("FreeOrNot");
 
                     b.Property<int>("Km");
 
@@ -72,6 +78,23 @@ namespace Biluthyrning.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Cartypes");
+                });
+
+            modelBuilder.Entity("Biluthyrning.Models.Customer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Birthday");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -241,6 +264,10 @@ namespace Biluthyrning.Migrations
                         .WithMany()
                         .HasForeignKey("CarId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Biluthyrning.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId");
                 });
 
             modelBuilder.Entity("Biluthyrning.Models.Car", b =>

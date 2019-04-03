@@ -11,5 +11,6 @@ namespace Biluthyrning.Models
     {
         public Booking Booking { get; set; }
         public IEnumerable<SelectListItem> AllCars { get; set; }
+        public IEnumerable<SelectListItem> AllCustomers { get; set; }
     }
 }

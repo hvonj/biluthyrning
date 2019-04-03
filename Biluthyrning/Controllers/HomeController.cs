@@ -17,6 +17,7 @@ namespace Biluthyrning.Controllers
     {
         private ApplicationDbContext _context;
 
+
         public HomeController(ApplicationDbContext context)
         {
 
@@ -93,11 +94,37 @@ namespace Biluthyrning.Controllers
                 Km = 679,
             };
 
+            var b1 = new Customer
+            {
+                FirstName = "Kalle",
+                LastName = "Karlsson",
+                Birthday = DateTime.Parse("5/1/1978"),
+            };
+
+            var b2 = new Customer
+            {
+                FirstName = "Linnea",
+                LastName = "Gunnarsson",
+                Birthday = DateTime.Parse("7/5/1992"),
+            };
+
+            var b3 = new Customer
+            {
+                FirstName = "Daniel",
+                LastName = "Andersson",
+                Birthday = DateTime.Parse("9/4/1990"),
+            };
+
             _context.Cars.Add(a1);
             _context.Cars.Add(a2);
             _context.Cars.Add(a3);
+            _context.Customers.Add(b1);
+            _context.Customers.Add(b2);
+            _context.Customers.Add(b3);
             _context.SaveChanges();
             return Ok();
+
+            
         }
 
         public IActionResult Privacy()
@@ -144,11 +171,11 @@ namespace Biluthyrning.Controllers
             return View(booking);
         }
 
-        public IActionResult ReturnCarAfterKM(int id, int kmdroven)
+        public IActionResult ReturnCarAfterKM(CarType cartype, int id, int kmdroven)
         {
             var booking = _context.Bookings.Where(x => x.Id == id).Include(y => y.Car).FirstOrDefault();
 
-            var price = CalculatePrice(kmdroven, booking.Id);
+            var price = CalculatePrice(cartype, kmdroven, booking.Id);
 
             ViewData["message"] = $"The calculated price for the period is {price} SEK.";
             ViewData["stringKm"] = $"{kmdroven}";
@@ -158,26 +185,26 @@ namespace Biluthyrning.Controllers
 
         }
 
-        private object CalculatePrice(int kmdroven, int id)
+        private object CalculatePrice(CarType cartype, int kmdroven, int id)
         {
             var booking = _context.Bookings.Where(x => x.Id == id).Include(y => y.Car).Include(y => y.Car.CarType).FirstOrDefault();
             var kmNow = booking.Car.Km;
             var type = booking.Car.CarType;
             var daySpan =   DateTime.Now - booking.StartDate;
-            var xx = daySpan.Days.ToString();
-            var numberOfDays = int.Parse(xx);
+            var u = daySpan.Days.ToString();
+            var numberOfDays = int.Parse(u);
             var numberOfKm = kmdroven - kmNow;
 
-            int baseDayRental = 500;
-            int kmPrice = 5;
+            decimal baseDayRental = 500;
+            decimal kmPrice = 5;
 
-            if (type.Id == 2)
+            if (cartype == CarType.Van)
             {
                 return (baseDayRental * numberOfDays * 1.2m) + (kmPrice * numberOfKm);
             }
-            else if (type.Id == 3)
+            else if (cartype == CarType.Minibus)
             {
-                return (baseDayRental * numberOfDays * 1.7) + (kmPrice * numberOfKm * 1.5);
+                return (baseDayRental * numberOfDays * 1.7m) + (kmPrice * numberOfKm * 1.5m);
             }
             else
             {
@@ -214,6 +241,45 @@ namespace Biluthyrning.Controllers
             _context.Bookings.Remove(deleteBooking);
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        public IActionResult GetCustomers()
+        {
+            List<Customer> list = new List<Customer>();
+
+            list = _context.Customers.ToList();
+            return View(list);
+
+        }
+
+        public IActionResult AvailableCustCar(DateTime customerbirthday)
+        {
+
+            List<Booking> list = new List<Booking>();
+
+            list = _context.Bookings.Where(x => x.CustomerBirthday == customerbirthday).ToList();
+            return View(list);
+
+        }
+
+        public IActionResult CreateNewCustomer()
+        {
+            return View();
+
+        }
+
+        public IActionResult CreateCustomer([Bind("Name,Lastname,Birthday")] Customer customer)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                _context.Add(customer);
+
+                return RedirectToAction(nameof(GetCustomers));
+            }
+
+            return RedirectToAction(nameof(CreateNewCustomer));
         }
     }
 }

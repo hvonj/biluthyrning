@@ -16,5 +16,6 @@ namespace Biluthyrning.Data
         public DbSet<Biluthyrning.Models.Booking> Bookings { get; set; }
         public DbSet<Biluthyrning.Models.Car> Cars { get; set; }
         public DbSet<Biluthyrning.Models.Cartype> Cartypes { get; set; }
+        public DbSet<Biluthyrning.Models.Customer> Customers { get; set; }
     }
 }

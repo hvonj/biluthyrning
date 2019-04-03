@@ -10,6 +10,7 @@ namespace Biluthyrning.Models
     {
         public int Id { get; set; }
         public DateTime CustomerBirthday { get; set; }
+        public Customer Customer { get; set; }
         public Car Car { get; set; }
         public int CarId { get; set; }
         public DateTime StartDate { get; set; }

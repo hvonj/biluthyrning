@@ -12,5 +12,14 @@ namespace Biluthyrning.Models
         public string RegNumber { get; set; }
         public int Km { get; set; }
         public Cartype CarType { get; set; }
+        public bool FreeOrNot { get; set; }
+
+    }
+
+    public enum CarType
+    {
+        Small,
+        Van,
+        Minibus
     }
 }

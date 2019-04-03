@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Biluthyrning.Models.Booking>
+
+
+<h1>Bookings on ID</h1>
+<br /><br />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">RegNumber</th>
+            <th scope="col">Km</th>
+            <th scope="col">Rented From</th>
+            <th scope="col">Rented To</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row"><a asp-action="AvailableCustCar" asp-route-id="@item.CustomerBirthday">@item.CustomerBirthday</a></th>
+                <td>@item.Car.RegNumber</td>
+                <td>@item.Car.Km</td>
+                <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+                <td>@item.EndDate</td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>

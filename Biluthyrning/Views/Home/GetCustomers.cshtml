@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Biluthyrning.Models.Customer>;
+
+<h1>Customers</h1>
+
+<br /><br />
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Birthday</th>
+            <th scope="col">Firstname</th>
+            <th scope="col">Lastname</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row"><a asp-action="AvailableCustCar" asp-route-custId="@item.Id">@item.Id</a></th>
+                <td>@item.Birthday.ToString("yyyy-MM-dd")</td>
+                <td>@item.FirstName</td>
+                <td>@item.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-action="CreateNewCustomer">
+    <input type="submit" value="Create new Customer" class="btn btn-default" /> <br /><br />
+</form>
+
+<br /><br /><br />
