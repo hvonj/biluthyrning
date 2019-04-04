@@ -259,12 +259,12 @@ namespace Biluthyrning.Controllers
 
         }
 
-        public IActionResult AvailableCustCar(DateTime customerbirthday)
+        public IActionResult AvailableCustCar(DateTime cbday)
         {
 
             List<Booking> list = new List<Booking>();
-
-            list = _context.Bookings.Where(x => x.CustomerBirthday == customerbirthday).Include(x => x.Car).Include(x => x.Customer).ToList();
+            
+            list = _context.Bookings.Where(x => x.CustomerBirthday == cbday).Include(x => x.Car).ToList();
             return View(list);
 
         }
